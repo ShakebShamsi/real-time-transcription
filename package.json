@@ -1,27 +1,18 @@
 {
-  "name": "real-time-transcription",
+  "name": "procucev-speech-to-text",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "description": "Real-time multilingual speech-to-text assignment with a transcription history dashboard.",
+  "workspaces": ["client", "server"],
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "dev": "concurrently -k -n API,WEB -c blue,magenta \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "npm run dev --workspace server",
+    "dev:client": "npm run dev --workspace client",
+    "build": "npm run build --workspace client",
+    "start": "npm run start --workspace server",
+    "check": "npm run check --workspace server && npm run build --workspace client"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
-    "eslint": "^10.13.0",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.7",
-    "globals": "^17.13.0",
-    "vite": "^8.3.4"
+    "concurrently": "^9.2.1"
   }
 }
