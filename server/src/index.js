@@ -1,3 +1,20 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Path to client/dist from server/src/index.js
+const clientDistPath = path.resolve(__dirname, '../../client/dist');
+
+// Serve React + Vite production files
+app.use(express.static(clientDistPath));
+
+// Serve index.html for the frontend root
+app.get('/', (req, res) => {
+  res.sendFile(path.join(clientDistPath, 'index.html'));
+});
+
 const path = require('node:path');
 require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
