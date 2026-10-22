@@ -10,7 +10,7 @@ import morgan from 'morgan';
 
 import transcriptionsRouter from './routes/transcriptions.js';
 import { attachRealtime } from './realtime.js';
-import database from './db.js';
+import * as database from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
