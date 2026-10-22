@@ -46,8 +46,10 @@ app.use(
     crossOriginResourcePolicy: {
       policy: 'cross-origin',
     },
+    contentSecurityPolicy: false,
   })
 );
+
 
 app.use(
   cors({
