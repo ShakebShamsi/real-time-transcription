@@ -1,6 +1,7 @@
 {
   "name": "procucev-speech-to-text",
   "version": "1.0.0",
+  "type": "module",
   "private": true,
   "description": "Real-time multilingual speech-to-text assignment with a transcription history dashboard.",
   "workspaces": ["client", "server"],
