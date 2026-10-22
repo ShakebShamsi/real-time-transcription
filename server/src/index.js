@@ -51,19 +51,11 @@ app.use(
 );
 
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      return callback(
-        new Error('This origin is not allowed by CORS.')
-      );
-    },
-  })
-);
+// Frontend and backend share the same origin in production.
+// CORS is only needed for cross-origin requests.
+if (process.env.NODE_ENV !== 'production') {
+  app.use(cors());
+}
 
 app.use(express.json({ limit: '1mb' }));
 app.use(morgan('tiny'));
