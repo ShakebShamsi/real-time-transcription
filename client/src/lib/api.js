@@ -3,13 +3,17 @@ const API_BASE = (
 ).replace(/\/$/, '');
 
 async function request(path, options = {}) {
+  const url = `${API_BASE}${path}`;
+
   let response;
 
   try {
-    response = await fetch(`${API_BASE}${path}`, {
+    response = await fetch(url, {
       ...options,
       headers: {
-        ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+        ...(options.body
+          ? { 'Content-Type': 'application/json' }
+          : {}),
         ...options.headers,
       },
     });
@@ -19,16 +23,46 @@ async function request(path, options = {}) {
     );
   }
 
+  // DELETE requests may return no content.
+  if (response.status === 204) {
+    return null;
+  }
+
+  const contentType = response.headers.get('content-type') || '';
+
+  // Read the response safely instead of blindly parsing JSON.
+  const responseText = await response.text();
+
+  let payload;
+
+  if (contentType.includes('application/json')) {
+    try {
+      payload = responseText ? JSON.parse(responseText) : {};
+    } catch {
+      throw new Error(
+        `The API returned invalid JSON (${response.status}).`
+      );
+    }
+  } else {
+    console.error('[API] Expected JSON but received another content type:', {
+      url,
+      status: response.status,
+      contentType,
+      responsePreview: responseText.slice(0, 200),
+    });
+
+    throw new Error(
+      `The API returned an unexpected response (${response.status}). Check the API route and server logs.`
+    );
+  }
+
   if (!response.ok) {
-    const payload = await response.json().catch(() => ({}));
     throw new Error(
       payload.error || `Request failed (${response.status}).`
     );
   }
 
-  if (response.status === 204) return null;
-
-  return response.json();
+  return payload;
 }
 
 export const api = {
